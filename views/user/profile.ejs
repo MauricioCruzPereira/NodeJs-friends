@@ -1,0 +1,112 @@
+<%- include("../partials/head.ejs") %>
+
+    <body>
+        <%- include("../partials/navbarUser.ejs") %>
+            <div class="hero is-fullheight has-background-info-light">
+                <div class="hero-body">
+                    <div class="container">
+                        <div class="columns">
+                            <div class="column is-offset-one-quarter is-half">
+                                <h1 class="title">Seu perfil</h1>
+                                <div class="box">
+                                    <div class="block box">
+                                        <p>Nome: <%= user.name %>
+                                                <button class="js-modal-trigger is-white is-pulled-right "
+                                                    data-target="modal-js-name"><i class="fas fa-cog"></i></button>
+                                        </p>
+                                    </div>
+                                    <div class="block box">
+                                        <p>Email: <%= user.email %>
+                                        </p>
+
+                                    </div>
+                                    <div class="block box control">
+                                        </p>
+                                        <p>Biografia</p>
+                                        <% if (bio) { %>
+                                            <textarea name="biography" class="textarea has-fixed-size"
+                                                readonly><%= bio.biography %></textarea>
+                                            <p class="help is-primary">
+                                                <% var dataInput=bio.updatedAt; data=new Date(dataInput); var options={
+                                                    weekday: 'long' , year: 'numeric' , month: 'long' , day: 'numeric'
+                                                    ,minute:'numeric', second:'numeric', hour:'numeric' };
+                                                    dataFormatada=data.toLocaleDateString('pt-BR',
+                                                    options).toUpperCase(); %>
+                                                    <%= dataFormatada %>
+                                            </p>
+                                            <% }else{ %>
+                                                <p>Você ainda n tem uma biografia cadastrada</p>
+                                                <% } %>
+
+                                                    <br>
+
+                                                    <button class="js-modal-trigger data-target button is-primary "
+                                                        data-target="modal-js-example">
+                                                        Adicionar
+                                                    </button>
+
+                                                    <% if (bio) { %>
+                                                        <a href="/biography/<%= user.id %>">
+                                                            <button class="button is-danger ">
+                                                                Excluir bibliografia
+                                                            </button>
+                                                        </a>
+                                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="modal-js-name">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Seu nome</p>
+                        <button class="delete" aria-label="close" type="reset"></button>
+                    </header>
+                    <form action="/user/name" method="POST">
+                        <section class="modal-card-body">
+                            <label for="" class="label">Nome</label>
+                            <input type="text" name="name" value="<%= user.name %>" class="input">
+                        </section>
+                        <footer class="modal-card-foot">
+                            <input type="hidden" value="<%= user.id %>" name="id">
+                            <button class="button is-success" type="submit">Mudar nome</button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+
+            <div id="modal-js-example" class="modal">
+                <div class="modal-background"></div>
+
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Adicione sua biografia</p>
+                        <button class="delete" aria-label="close">Fechar</button>
+                    </header>
+                    <form action="/biography" method="POST">
+                        <section class="modal-card-body">
+
+                            <% if (bio) { %>
+                                <textarea name="biography"
+                                    class="textarea has-fixed-size"><%= bio.biography %></textarea>
+                                <% } else{ %>
+                                    <textarea name="biography" class="textarea has-fixed-size"></textarea>
+                                    <% } %>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <input type="hidden" name="id" value="<%= user.id %> ">
+                            <button class="button is-success" type="submit">Salvar biografia</button>
+                            <!-- <button class="button" type="close">Cancelar</button>-->
+                        </footer>
+                    </form>
+                </div>
+            </div>
+
+    </body>
+
+    <%- include("../partials/rodape.ejs") %>

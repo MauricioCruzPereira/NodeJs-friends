@@ -1,0 +1,64 @@
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <%- include('../partials/navbaradmin.ejs') %>
+            <div class="hero is-fullheight has-background-info-light">
+                <div class="hero-body">
+                    <div class="container">
+                        <div class="columns is-mobile is-centered">
+                            <div class="column is-half">
+                                <div class="box">
+                                    <table class="table has-text-centered">
+                                        <thead>
+                                            <tr>
+                                                <th><abbr title="Position">Id</abbr></th>
+                                                <th>Nome</th>
+                                                <th>Email</th>
+                                                <th>Horário criado</th>
+                                                <th>Excluir</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% users.forEach(user=> { %>
+                                                <% if (user.admin==0) { %>
+                                                    <tr>
+                                                        <th>
+                                                            <%= user.id %>
+                                                        </th>
+                                                        <th>
+                                                            <%= user.name %>
+                                                        </th>
+                                                        <th>
+                                                            <%= user.email %>
+                                                        </th>
+                                                        <th>
+                                                            <% var dataInput=user.createdAt; data=new Date(dataInput);
+                                                                var options={ weekday: 'long' , year: 'numeric' ,
+                                                                month: 'long' , day: 'numeric' ,minute:'numeric',
+                                                                second:'numeric', hour:'numeric' };
+                                                                dataFormatada=data.toLocaleDateString('pt-BR',
+                                                                options).toUpperCase(); %>
+                                                                <%= dataFormatada %>
+                                                        </th>
+                                                        <th>
+                                                            <a href="/admin/user/<%= user.id %>"><i
+                                                                    class="fas fa-trash"></i></a>
+                                                        </th>
+                                                    </tr>
+                                                    <% } %>
+
+                                                        <% }) %>
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </body>
+
+    <%- include('../partials/rodape.ejs') %>
