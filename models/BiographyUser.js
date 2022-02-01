@@ -2,7 +2,7 @@ const Sequelize = require("sequelize")
 const connection = require("../database/database")
 const User = require("./User")
 
-const BiographyUser = connection.define('Biographys', {
+const BiographyUser = connection.define('biographys', {
     biography: {
         type: Sequelize.STRING,
         allowNull: true
@@ -11,6 +11,6 @@ const BiographyUser = connection.define('Biographys', {
 
 BiographyUser.belongsTo(User)
 
-BiographyUser.sync({ force: false })
+// BiographyUser.sync({ force: true })
 
 module.exports = BiographyUser

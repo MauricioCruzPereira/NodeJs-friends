@@ -1,0 +1,36 @@
+<%- include("../../partials/head.ejs") %>
+
+    <body>
+        <%- include("../../partials/navbarUser.ejs") %>
+            <div class="hero is-fullheight has-background-info-light">
+                <div class="hero-body">
+                    <div class="container">
+                        <div class="divSection">
+                            <div class="box1">
+
+                                <div class="tabs is-centered is-toggle is-toggle-rounded">
+                                    <ul>
+                                        <li><a href="/user/friends">Amigos</a></li>
+                                        <li class="is-active"><a href="/user/sent">Pendentes</a></li>
+                                        <li><a href="/user/pending">Solicitações</a></li>
+                                    </ul>
+                                </div>
+
+                                <h1>Solicitação pendente</h1>
+                                <% friends.forEach(friend=> { %>
+                                    <% users.forEach(user=> { %>
+                                        <% if ( friend.idRecipient==user.id ) { %>
+                                            <%= user.name %>
+                                                <br>
+                                                <% } %>
+                                                    <% }) %>
+
+                                                        <% }) %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </body>
+
+    <% - include("../../partials/rodape.ejs") %>

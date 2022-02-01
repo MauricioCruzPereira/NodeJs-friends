@@ -1,18 +1,22 @@
 const Sequelize = require("sequelize")
 const connection = require("../database/database")
-const User = require("./User")
 
-const Friends = connection.define('Friends', {
+const Friends = connection.define('friends', {
     idSender: {
-        type: Sequelize.NUMBER,
-        alloNull: false,
+        type: Sequelize.FLOAT,
+        allowNull: false
     },
     idRecipient: {
-        type: Sequelize.NUMBER,
-        alloNull: false,
+        type: Sequelize.FLOAT,
+        allowNull: false
+    },
+    answer: {
+        type: Sequelize.TEXT,
+        allowNull: false
     }
 })
 
-Friends.sync({ force: false })
+//Friends.sync({ force: true })
 
 module.exports = Friends
+

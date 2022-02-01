@@ -5,22 +5,79 @@
             <div class="hero is-fullheight has-background-info-light">
                 <div class="hero-body">
                     <div class="container">
+                        <div class="divSection">
+                            <div class="box1">
+                                <form action="/user/users" method="POST">
+
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <input class="input is-normal" type="text" placeholder="Nome" name="search"
+                                                id="search" value="<%=search%>">
+                                        </div>
+                                        <div class="control">
+                                            <input type="submit" value="Procurar" class="button is-success is-normal">
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <% if (notFound) { %>
+                                    <p class="help is-danger">
+                                        <%= notFound %>
+                                    </p>
+                                    <% } %>
+                                        <% usersFound.forEach(userFound=> { %>
+                                            <% if (userFound.id !=user.id) { %>
+                                                <div class="list1">
+                                                    <div class="imgBx1">
+                                                        <img src="/uploads/<%= userFound.avatar %>" alt="">
+                                                    </div>
+                                                    <div class="content1">
+                                                        <h2 class="rank1">
+
+                                                            <form action="/user/request" method="POST">
+                                                                <input type="hidden" name="id"
+                                                                    value="<%= userFound.id %> ">
+                                                                <button type="submit"><i
+                                                                        class="fas fa-user-plus"></i></button>
+                                                            </form>
+
+                                                        </h2>
+                                                        <h4>
+                                                            <%= userFound.name %>
+
+                                                        </h4>
+                                                        <p>
+                                                            <!-- tratamento para deixa letra maiuscula -->
+                                                            <%= userFound.profession!=null || "" ?
+                                                                userFound.profession.substring(0,1).toUpperCase()+userFound.profession.substring(1)
+                                                                : "Nenhum emprego" %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+
+                                                    <% }) %>
+
+                                                        <% if (searchError) { %>
+                                                            <p class="help is-danger">
+                                                                <%= searchError %>
+                                                            </p>
+                                                            <% } %>
+                            </div>
+                        </div>
                         <div class="field is-grouped">
-                            <p class="control">
-                                <input class="input" type="text" placeholder="Nome" name="Search" id="Search">
-                            </p>
-                            <p class="control">
-                                <a class="button is-info">
-                                    Search
-                                </a>
-                            </p>
 
                         </div>
+
+                        <div class="field is-grouped">
+                            <div class="control">
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
     </body>
-    <script>
-    </script>
 
-    <%- include("../partials/rodape.ejs") %>
+    <% - include("../partials/rodape.ejs") %>

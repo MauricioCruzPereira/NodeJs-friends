@@ -45,6 +45,21 @@
                                         </div>
                                         <div class="block">
                                             <div class="field">
+                                                <label class="label">Profissão</label>
+                                                <div class="control">
+                                                    <input class="input is-medium is-hovered" type="text"
+                                                        placeholder="Profissão" name="profession">
+                                                    <% if (professionError) { %>
+                                                        <p class="help is-danger">
+                                                            <%= professionError %>
+                                                        </p>
+                                                        <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="block">
+                                            <div class="field">
                                                 <label class="label">Senha</label>
                                                 <div class="control">
                                                     <input class="input is-medium is-hovered" type="password"

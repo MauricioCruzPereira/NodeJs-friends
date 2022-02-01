@@ -6,13 +6,33 @@
                 <div class="hero-body">
                     <div class="container">
                         <div class="columns">
-                            <div class="column is-offset-one-quarter is-half">
+                            <div class="column is-offset-one-quarter is-half mt-6">
                                 <h1 class="title">Seu perfil</h1>
                                 <div class="box">
+                                    <div class="columns is-centered is-mobile">
+                                        <figure class="image is-128x128">
+                                            <img src="/uploads/<%= user.avatar %>" alt="" class="is-rounded">
+                                        </figure>
+                                    </div>
+                                    <div class="block box">
+                                        <p>Foto
+                                            <button class="js-modal-trigger is-white is-pulled-right "
+                                                data-target="modal-js-img"><i class="fas fa-cog"></i></button>
+                                        </p>
+                                    </div>
                                     <div class="block box">
                                         <p>Nome: <%= user.name %>
                                                 <button class="js-modal-trigger is-white is-pulled-right "
                                                     data-target="modal-js-name"><i class="fas fa-cog"></i></button>
+                                        </p>
+                                    </div>
+                                    <div class="block box">
+                                        <p>Profissão: <%= user.profession!=null|| "" ?
+                                                user.profession.substring(0,1).toUpperCase()+user.profession.substring(1)
+                                                : "Nenhum emprego" %>
+                                                <button class="js-modal-trigger is-white is-pulled-right "
+                                                    data-target="modal-js-profession"><i
+                                                        class="fas fa-cog"></i></button>
                                         </p>
                                     </div>
                                     <div class="block box">
@@ -77,8 +97,79 @@
                             <button class="button is-success" type="submit">Mudar nome</button>
                         </footer>
                     </form>
+
                 </div>
             </div>
+
+            <div class="modal" id="modal-js-profession">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Sua profissão</p>
+                        <button class="delete" aria-label="close" type="reset"></button>
+                    </header>
+                    <form action="/user/profession" method="POST">
+                        <section class="modal-card-body">
+                            <label for="" class="label">Profissão</label>
+                            <input type="text" name="profession" value="<%= user.profession!=null|| "" ?
+                            user.profession.substring(0,1).toUpperCase()+user.profession.substring(1)
+                            : " Nenhum emprego" %>" class="input">
+                        </section>
+                        <footer class="modal-card-foot">
+                            <input type="hidden" value="<%= user.id %>" name="id">
+                            <button class="button is-success" type="submit">Mudar profissão</button>
+                        </footer>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="modal" id="modal-js-img">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Foto de perfil</p>
+                        <button class="delete" aria-label="close" type="reset"></button>
+                    </header>
+                    <form action="/user/avatar" method="POST" enctype="multipart/form-data">
+                        <section class="modal-card-body">
+                            <div class="file is-info has-name is-boxed is-centered">
+                                <div id="file-js-example" class="file has-name">
+                                    <label class="file-label">
+                                        <input class="file-input" type="file" name="avatar">
+                                        <span class="file-cta">
+                                            <span class="file-icon">
+                                                <i class="fas fa-upload"></i>
+                                            </span>
+                                            <span class="file-label">
+                                                Enviar arquivo
+                                            </span>
+                                        </span>
+                                        <span class="file-name">
+                                            Nenhuma foto selecionada
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <input type="hidden" value="<%= user.id %>" name="id">
+                            <button class="button is-success" type="submit">Mudar foto</button>
+                        </footer>
+                    </form>
+
+                </div>
+            </div>
+
+            <script>
+                const fileInput = document.querySelector('#file-js-example input[type=file]');
+                fileInput.onchange = () => {
+                    if (fileInput.files.length > 0) {
+                        const fileName = document.querySelector('#file-js-example .file-name');
+                        fileName.textContent = fileInput.files[0].name;
+                    }
+                }
+            </script>
 
             <div id="modal-js-example" class="modal">
                 <div class="modal-background"></div>
@@ -101,7 +192,7 @@
                         <footer class="modal-card-foot">
                             <input type="hidden" name="id" value="<%= user.id %> ">
                             <button class="button is-success" type="submit">Salvar biografia</button>
-                            <!-- <button class="button" type="close">Cancelar</button>-->
+                            <!--<button class="button" type="close">Cancelar</button>-->
                         </footer>
                     </form>
                 </div>

@@ -13,11 +13,17 @@ const connection = require("./database/database")
 //controllers
 const userController = require('./controllers/userController')
 const adminController = require('./controllers/adminController')
+const friendsController = require('./controllers/friendsController')
 
 //modals
 const User = require("./models/User")
 const BiographyUser = require("./models/BiographyUser")
 const Friends = require("./models/Friends")
+
+
+//middlewars
+const userLogout = require("./middlewares/userLogout")
+
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -48,8 +54,9 @@ app.use(flash())
 
 app.use("/", userController)
 app.use("/", adminController)
+app.use("/", friendsController)
 
-app.get("/", (req, res) => {
+app.get("/", userLogout, (req, res) => {
     res.render("index")
 })
 

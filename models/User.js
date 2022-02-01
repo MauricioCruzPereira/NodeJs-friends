@@ -14,12 +14,20 @@ const User = connection.define('users', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    profession: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    avatar: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
     admin: {
         type: Sequelize.BOOLEAN,
         allowNull: false
     }
 })
 
-//User.sync({ force: false })
+//User.sync({ force: true })
 
 module.exports = User

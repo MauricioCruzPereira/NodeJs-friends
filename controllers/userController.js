@@ -5,11 +5,25 @@ const bcrypt = require('bcrypt')
 const userLogin = require("../middlewares/userLogin")
 const BiographyUser = require("../models/BiographyUser")
 const userLogout = require("../middlewares/userLogout")
+const Sequelize = require("sequelize")
+const verifyCamp = require('../middlewares/verifyCamp')
+const Op = Sequelize.Op
+//middlewars para tratamentos de imagem, upload
+const multer = require("multer")
+//modulo nativo do node
+//const path = require("path")
+const uploadImage = require("../middlewares/uploadImage")
+//mexer com arquivos
+const fs = require("fs")
+
+const Friends = require("../models/Friends")
+
 
 router.get("/users/register", userLogout, (req, res) => {
     let nameError = req.flash("nameError")
     let emailError = req.flash("emailError")
     let passwordError = req.flash("passwordError")
+    let professionError = req.flash("professionError");
 
     let name = req.flash("name")
     let email = req.flash("email")
@@ -29,7 +43,7 @@ router.get("/users/register", userLogout, (req, res) => {
     emailRegistered = (emailRegistered == undefined || emailRegistered.length == 0) ? undefined : emailRegistered
 
 
-    res.render('user/register', { nameError, emailError, passwordError, name: name, email: email, emailRegistered, registerSuccess })
+    res.render('user/register', { nameError, emailError, passwordError, professionError, name: name, email: email, emailRegistered, registerSuccess })
 })
 
 router.get("/users/login", userLogout, (req, res) => {
@@ -40,7 +54,6 @@ router.get("/users/login", userLogout, (req, res) => {
 
     emailError = (emailError == undefined || emailError.length == 0) ? undefined : emailError
     passwordError = (passwordError == undefined || passwordError.length == 0) ? undefined : passwordError
-
 
     incorrect = (incorrect == undefined || incorrect.length == 0) ? "" : incorrect
 
@@ -59,26 +72,10 @@ router.get("/user/profile", userLogin, (req, res) => {
 
 })
 
-router.post("/user/register", (req, res) => {
-    const { name, email, password } = req.body
+router.post("/user/register", verifyCamp, (req, res) => {
+    const { name, email, password, profession } = req.body
 
-    let nameError
-    let emailError
-    let passwordError
-
-    if (name == "" || name == undefined) {
-        nameError = "Nome não pode ser vázio"
-    }
-
-    if (email == "" || email == undefined) {
-        emailError = "Email não pode ser vázio"
-    }
-
-    if (password == "" || password == undefined) {
-        passwordError = "Senha não pode ser vázia"
-    }
-
-    if (name != "" && email != "" && password != "") {
+    if (name != "" && email != "" && password != "" && profession != "") {
         User.findOne({
             where: {
                 email: email
@@ -91,7 +88,9 @@ router.post("/user/register", (req, res) => {
                 User.create({
                     name,
                     email,
+                    profession,
                     password: hash,
+                    avatar: "default-avatar-icon.png",
                     admin: false
                 }).then(() => {
                     //deu certo
@@ -115,10 +114,6 @@ router.post("/user/register", (req, res) => {
         })
     }
     else {
-        req.flash("nameError", nameError)
-        req.flash("emailError", emailError)
-        req.flash("passwordError", passwordError)
-
         req.flash("name", name)
         req.flash("email", email)
 
@@ -127,20 +122,10 @@ router.post("/user/register", (req, res) => {
 
 })
 
-router.post("/user/login", (req, res) => {
+router.post("/user/login", verifyCamp, (req, res) => {
     const { email, password } = req.body
 
     let incorrect = "Email ou senha inválida"
-    let emailError
-    let passwordError
-
-    if (email == "" || email == undefined) {
-        emailError = "Email não pode ser vázio"
-    }
-
-    if (password == "" || password == undefined) {
-        passwordError = "Senha não pode ser vázia"
-    }
 
     if (email != "" && password != "") {
         User.findOne({
@@ -156,6 +141,8 @@ router.post("/user/login", (req, res) => {
                         id: user.id,
                         name: user.name,
                         email: user.email,
+                        profession: user.profession,
+                        avatar: user.avatar,
                         admin: user.admin
                     }
                     res.redirect("/user/index")
@@ -172,8 +159,6 @@ router.post("/user/login", (req, res) => {
         })
     }
     else {
-        req.flash("emailError", emailError)
-        req.flash("passwordError", passwordError)
         req.flash("email", email)
 
         res.redirect("/users/login")
@@ -242,8 +227,6 @@ router.get("/biography/:id", userLogin, (req, res) => {
 
 router.post("/user/name", userLogin, (req, res) => {
     let { name, id } = req.body
-    console.log(name)
-    console.log(id)
 
     if (name != "" && !isNaN(id)) {
         User.update({
@@ -265,15 +248,116 @@ router.post("/user/name", userLogin, (req, res) => {
 
 })
 
+router.post("/user/profession", userLogin, (req, res) => {
+    let { profession, id } = req.body
+
+    if (profession != "" && !isNaN(id)) {
+        User.update({
+            profession
+        }, {
+            where: {
+                id
+            }
+        }).then(() => {
+            req.session.user.profession = profession
+            res.redirect("/user/profile")
+        }).catch(err => {
+            res.redirect("/user/profile")
+        })
+    }
+    else {
+        res.redirect("/user/profile")
+    }
+
+})
+
+router.post("/user/avatar", userLogin, uploadImage.single('avatar'), (req, res) => {
+
+    if (req.file) {
+        /*
+        console.log(req.file)
+        console.log(req.file.filename)
+        console.log(req.session.user.id)
+        */
+        //res.send("certo")
+
+        if (req.session.user.avatar != "default-avatar-icon.png") {
+            fs.unlink(`./public/uploads/${req.session.user.avatar}`, function (err, stats) {
+                if (err) return console.log(err);
+                console.log(stats);
+            });
+        }
+
+        User.update({
+            avatar: req.file.filename
+        }, {
+            where: {
+                id: req.session.user.id
+            }
+        }).then(() => {
+            req.session.user.avatar = req.file.filename;
+            res.redirect("/user/profile")
+        }).catch(err => {
+            res.redirect("/user/profile")
+        })
+
+
+    }
+    else {
+        res.redirect("/user/profile")
+    }
+})
+
 router.get("/logout", userLogin, (req, res) => {
     req.session.user = undefined
     res.redirect("/")
 })
 
-router.get("/user/index", (req, res) => {
-    User.findAll().then(users => {
-        res.render("user/index", { users: users })
-    })
+router.get("/user/index", userLogin, (req, res) => {
+    let usersFound = req.flash("usersFound")
+    let search = req.flash("search")
+    let notFound = req.flash("notFound")
+    let searchError = req.flash("searchError")
+
+    res.render("user/index", { usersFound: usersFound, search, notFound, searchError, user: req.session.user })
+})
+
+router.post("/user/users", userLogin, verifyCamp, (req, res) => {
+    let { search } = req.body
+
+    if (search != "") {
+        User.findAll({
+            where: {
+                name: {
+                    [Op.like]: `${search}%`
+                }
+            },
+            attributes: ['id', 'name', 'profession', 'avatar'],
+            order: [
+                ['name', 'ASC']
+            ]
+        }).then(usersFound => {
+            //console.log(search)
+            console.log(usersFound)
+            //console.log(usersFound[0].users)
+            if (usersFound.length != 0) {
+                req.flash("search", search)
+                req.flash("usersFound", usersFound)
+                res.redirect("/user/index")
+            }
+            else {
+                let notFound = "Nenhuma pessoa cadastrada com esse nome"
+                req.flash("notFound", notFound)
+                res.redirect("/user/index")
+            }
+        }).catch(() => {
+            res.redirect("/user/index")
+        })
+    }
+    else {
+        res.redirect("/user/index")
+    }
+
 })
 
 module.exports = router
