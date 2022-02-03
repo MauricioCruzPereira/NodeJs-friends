@@ -16,14 +16,49 @@
                                     </ul>
                                 </div>
 
-                                <h1>Solicitação pendente</h1>
+                                <h1>Solicitações Recebidas</h1>
                                 <% friends.forEach(friend=> { %>
                                     <% users.forEach(user=> { %>
-                                        <% if ( friend.idRecipient==user.id ) { %>
-                                            friends<%= friend.idSender %>
-                                                users<%= user.id %>
-                                                    <br>
-                                                    <% } %>
+                                        <% if (friend.idRecipient==usuario.id) { %>
+                                            <% if (friend.idSender==user.id ) { %>
+                                                <div class="list1">
+                                                    <div class="imgBx1">
+                                                        <img src="/uploads/<%= user.avatar %>" alt="">
+                                                    </div>
+                                                    <div class="content1">
+                                                        <div class="rank1">
+
+                                                            <form action="/user/answer" method="post"
+                                                                style="float:left; margin-right: 5px;">
+                                                                <input type="hidden" name="id" value="<%= user.id %> ">
+                                                                <input type="hidden" name="response" value="accept">
+                                                                <input type="submit" value="Aceitar"
+                                                                    class="button is-success is-small">
+                                                            </form>
+
+                                                            <form action="/user/answer" method="post"
+                                                                style="float:left; margin-left: 5px;">
+                                                                <input type="hidden" name="id" value="<%= user.id %> ">
+                                                                <input type="hidden" name="response" value="decline">
+                                                                <input type="submit" value="Recusar"
+                                                                    class="button is-danger is-small">
+                                                            </form>
+
+                                                        </div>
+                                                        <h4>
+                                                            <%= user.name %>
+
+                                                        </h4>
+                                                        <p>
+                                                            <!-- tratamento para deixa letra maiuscula -->
+                                                            <%= user.profession!=null || "" ?
+                                                                user.profession.substring(0,1).toUpperCase()+user.profession.substring(1)
+                                                                : "Nenhum emprego" %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                                    <% }%>
                                                         <% }) %>
 
                                                             <% }) %>

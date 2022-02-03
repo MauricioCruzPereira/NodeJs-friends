@@ -17,7 +17,33 @@
                                     </ul>
                                 </div>
 
-                                <h1>Solicitação pendente</h1>
+                                <h1>Amigos </h1>
+                                <% friends.forEach(friend=> { %>
+                                    <% users.forEach(user=> { %>
+                                        <% if ( friend.idRecipient==user.id) { %>
+                                            <% if (friend.idRecipient!=sessionUser.id) { %>
+                                                <div class="list1">
+                                                    <div class="imgBx1">
+                                                        <img src="/uploads/<%= user.avatar %>" alt="">
+                                                    </div>
+                                                    <div class="content1">
+                                                        <h4>
+                                                            <%= user.name %>
+
+                                                        </h4>
+                                                        <p>
+                                                            <!-- tratamento para deixa letra maiuscula -->
+                                                            <%= user.profession!=null || "" ?
+                                                                user.profession.substring(0,1).toUpperCase()+user.profession.substring(1)
+                                                                : "Nenhum emprego" %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                                    <% } %>
+                                                        <% }) %>
+
+                                                            <% }) %>
                             </div>
                         </div>
                     </div>

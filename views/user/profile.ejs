@@ -10,19 +10,19 @@
                                 <h1 class="title">Seu perfil</h1>
                                 <div class="box">
                                     <div class="columns is-centered is-mobile">
-                                        <figure class="image is-128x128">
-                                            <img src="/uploads/<%= user.avatar %>" alt="" class="is-rounded">
+                                        <figure class="image imgProfile">
+                                            <img src="/uploads/<%= user.avatar %>" alt="" class="is-rounded ">
                                         </figure>
                                     </div>
                                     <div class="block box">
                                         <p>Foto
-                                            <button class="js-modal-trigger is-white is-pulled-right "
+                                            <button class="js-modal-trigger is-white is-pulled-right btnNo"
                                                 data-target="modal-js-img"><i class="fas fa-cog"></i></button>
                                         </p>
                                     </div>
                                     <div class="block box">
                                         <p>Nome: <%= user.name %>
-                                                <button class="js-modal-trigger is-white is-pulled-right "
+                                                <button class="js-modal-trigger is-white is-pulled-right btnNo"
                                                     data-target="modal-js-name"><i class="fas fa-cog"></i></button>
                                         </p>
                                     </div>
@@ -30,7 +30,7 @@
                                         <p>Profissão: <%= user.profession!=null|| "" ?
                                                 user.profession.substring(0,1).toUpperCase()+user.profession.substring(1)
                                                 : "Nenhum emprego" %>
-                                                <button class="js-modal-trigger is-white is-pulled-right "
+                                                <button class="js-modal-trigger is-white is-pulled-right btnNo"
                                                     data-target="modal-js-profession"><i
                                                         class="fas fa-cog"></i></button>
                                         </p>
