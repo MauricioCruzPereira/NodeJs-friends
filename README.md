@@ -23,7 +23,7 @@ UPDATE (nome da tabela) SET admin = true WHERE id = (id da pessoa desejado)
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 
-## Explicação dos comandos a cima
+## Explicação dos comandos acima
 
 - Sobre o `npm i`, ele irá instalar todas as dependências necessárias para o projeto rodar.
 - Sobre o `npm install --save nodemon`, ele irá instalar uma dependência que ao visualizar no arquivo 
