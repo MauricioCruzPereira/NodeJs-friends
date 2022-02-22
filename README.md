@@ -21,6 +21,14 @@ UPDATE (nome da tabela) SET admin = true WHERE id = (id da pessoa desejado)
 ``` 
 - Após fazer essa alteração, logar novamente e na barra de pesquisa escrever: `http://localhost:1616/admin`
 
+- Adicionar o banco de dados para utilização do programa
+- crie um arquivo com o nome ".env" na raiz do projeto
+```
+DB_NAME=nome do seu banco de dados
+DB_USER=o root
+DB_PASSWORD=senha utilizada para entrar no DB, caso não tenha coloque aspas duplas
+```
+
 -----------------------------------------------------------------------------------------------------------------------------------------
 
 ## Explicação dos comandos acima
