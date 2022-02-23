@@ -19,7 +19,7 @@ Sistema de adicionar amigos, com autenticação e adiministrador.
 ```
 UPDATE (nome da tabela) SET admin = true WHERE id = (id da pessoa desejado)
 ``` 
-- Após fazer essa alteração, logar novamente e na barra de pesquisa escrever: `http://localhost:1616/admin`
+- Após fazer essa alteração, logar novamente e na barra de pesquisa escrever: `http://localhost:1616/admin/users`
 
 - Adicionar o banco de dados para utilização do programa
 - crie um arquivo com o nome ".env" na raiz do projeto
